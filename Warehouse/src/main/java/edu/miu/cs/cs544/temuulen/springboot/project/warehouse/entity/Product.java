@@ -1,32 +1,40 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private int price;
-    private int quantity;
+
+    @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ManyToMany
-    private List<Warehouse> warehouses;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @OneToMany
+    private List<Stock> stocks;
 
     public Product() {}
 
-    public Product(String name, int price, int quantity) {
+    public Product(String name, int price, Category category, Date createdAt, Date updatedAt, List<Stock> stocks) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.category = category;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.stocks = stocks;
     }
 
     public Long getId() {
@@ -49,16 +57,40 @@ public class Product {
         this.price = price;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
     }
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", quantity=" + quantity + '}';
+        return "Product{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", category=" + category + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", stocks=" + stocks + '}';
     }
 }
