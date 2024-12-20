@@ -1,5 +1,7 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.service;
 
+import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto.OrderDTO;
+import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto.OrderDetailDTO;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.*;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.InventoryLogRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class StockService {
@@ -34,7 +37,7 @@ public class StockService {
         Stock stock = stockRepository.findByProductAndWarehouse(product, warehouse)
                 .orElseGet(() -> new Stock(product, warehouse, 0, null));
 
-        stock.setQuantity(stock.getQuantity() + quantity);
+        stock.setQty(stock.getQty() + quantity);
         stock.setUpdatedAt(new Date());
         stock = stockRepository.save(stock);
 
@@ -47,5 +50,45 @@ public class StockService {
 
     public int getTotalStockByProduct(Long productId) {
         return stockRepository.findTotalStockByProductId((productId)).orElse(0);
+    }
+
+    public void processSale(OrderDTO order) {
+        for (OrderDetailDTO detail : order.getDetails()) {
+            Product product = productRepository.findById(detail.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            List<Stock> stocks = stockRepository.findByProductOrderByQuantityDesc(product);
+
+            int orderedQty = detail.getQty();
+
+            int sum = stocks.stream().mapToInt(Stock::getQty).sum();
+            if (sum < orderedQty) {
+                throw new RuntimeException("Insufficient stock for product [ID, Name]: [" + product.getId() + ", " + product.getName() + "]");
+            }
+
+            for (Stock stock : stocks) {
+                if (orderedQty < 0) break;
+
+                int availableQty = stock.getQty();
+                if (availableQty >= orderedQty) {
+                    stock.setQty(availableQty - orderedQty);
+                    stock.setUpdatedAt(new Date());
+                    stockRepository.save(stock);
+                    orderedQty = 0;
+                }
+                else {
+                    stock.setQty(0);
+                    stock.setUpdatedAt(new Date());
+                    stockRepository.save(stock);
+                    orderedQty -= availableQty;
+                }
+            }
+
+        }
+    }
+
+
+    public void processReturn(OrderDTO order) {
+
     }
 }

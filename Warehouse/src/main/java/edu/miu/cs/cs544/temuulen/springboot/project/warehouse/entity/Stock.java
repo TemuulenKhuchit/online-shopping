@@ -24,7 +24,7 @@ public class Stock {
     @JsonBackReference("warehouse-stock")
     private Warehouse warehouse;
 
-    private int quantity;
+    private int qty;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("warehouse-stock")
@@ -35,10 +35,10 @@ public class Stock {
 
     public Stock() {}
 
-    public Stock(Product product, Warehouse warehouse, int quantity, Date updatedAt) {
+    public Stock(Product product, Warehouse warehouse, int qty, Date updatedAt) {
         this.product = product;
         this.warehouse = warehouse;
-        this.quantity = quantity;
+        this.qty = qty;
         this.updatedAt = updatedAt;
     }
 
@@ -62,12 +62,12 @@ public class Stock {
         this.warehouse = warehouse;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getQty() {
+        return qty;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQty(int quantity) {
+        this.qty = quantity;
     }
 
     public Date getUpdatedAt() {
@@ -80,6 +80,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "Stock{" + "id=" + id + ", product=" + product + ", warehouse=" + warehouse + ", quantity=" + quantity + ", updatedAt=" + updatedAt + '}';
+        return "Stock{" + "id=" + id + ", product=" + product + ", warehouse=" + warehouse + ", quantity=" + qty + ", updatedAt=" + updatedAt + '}';
     }
 }
