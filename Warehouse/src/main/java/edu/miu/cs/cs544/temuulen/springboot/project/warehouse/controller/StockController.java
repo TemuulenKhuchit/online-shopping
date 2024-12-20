@@ -16,14 +16,16 @@ public class StockController {
     private StockService stockService;
 
     @PostMapping(value = "/restock")
-    public Stock restock(@RequestParam Long productId, @RequestParam Long warehouseId,
+    public ResponseEntity<Stock> restock(@RequestParam Long productId, @RequestParam Long warehouseId,
                          @RequestParam int quantity, @RequestParam(required = false) String description) {
-        return stockService.restock(productId, warehouseId, quantity, description);
+        Stock stock = stockService.restock(productId, warehouseId, quantity, description);
+        return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
     @GetMapping(value = "/total-stock")
-    public Integer getTotalStockByProduct(@RequestParam Long productId) {
-        return stockService.getTotalStockByProduct(productId);
+    public ResponseEntity<Integer> getTotalStockByProduct(@RequestParam Long productId) {
+        int totalStock = stockService.getTotalStockByProduct(productId);
+        return new ResponseEntity<>(totalStock, HttpStatus.OK);
     }
 
     // Stock Sale

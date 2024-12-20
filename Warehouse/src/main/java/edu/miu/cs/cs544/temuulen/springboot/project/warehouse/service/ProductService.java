@@ -19,8 +19,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product getProductById(Long productId) {
-        return productRepository.findById(productId)
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
@@ -28,8 +28,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product updateProduct(Long productId, Product productDetails) {
-        Product product = getProductById(productId);
+    public Product updateProduct(Long id, Product productDetails) {
+        Product product = getProductById(id);
         product.setName(productDetails.getName());
         product.setPrice(productDetails.getPrice());
         product.setCostPrice(productDetails.getCostPrice());
@@ -38,8 +38,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public void deleteProduct(Long productId) {
-        Product product = getProductById(productId);
+    public void deleteProduct(Long id) {
+        Product product = getProductById(id);
         productRepository.delete(product);
     }
 }

@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -12,6 +13,8 @@ public class InventoryLog {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "stock_id")
+    @JsonBackReference
     private Stock stock;
 
     @Enumerated(EnumType.STRING)

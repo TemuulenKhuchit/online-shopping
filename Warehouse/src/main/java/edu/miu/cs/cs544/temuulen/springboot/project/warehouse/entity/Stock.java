@@ -1,9 +1,11 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Stock {
@@ -23,6 +25,10 @@ public class Stock {
     private Warehouse warehouse;
 
     private int quantity;
+
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("warehouse-stock")
+    private List<InventoryLog> logs;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
