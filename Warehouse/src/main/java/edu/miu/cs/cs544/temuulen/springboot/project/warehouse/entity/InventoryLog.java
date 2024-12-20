@@ -17,6 +17,8 @@ public class InventoryLog {
     @Enumerated(EnumType.STRING)
     private StockChangeType changeType;
 
+    private int quantity;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date logTimestamp;
 
@@ -24,9 +26,10 @@ public class InventoryLog {
 
     public InventoryLog() {}
 
-    public InventoryLog(Stock stock, StockChangeType changeType, Date logTimestamp, String description) {
+    public InventoryLog(Stock stock, StockChangeType changeType, int quantity, Date logTimestamp, String description) {
         this.stock = stock;
         this.changeType = changeType;
+        this.quantity = quantity;
         this.logTimestamp = logTimestamp;
         this.description = description;
     }
@@ -49,6 +52,14 @@ public class InventoryLog {
 
     public void setChangeType(StockChangeType changeType) {
         this.changeType = changeType;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public Date getLogTimestamp() {

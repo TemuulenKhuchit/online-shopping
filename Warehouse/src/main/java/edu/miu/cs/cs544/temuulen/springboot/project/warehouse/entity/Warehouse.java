@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ public class Warehouse {
     private Long id;
 
     private String name;
-    private double size;
+    private double area;
 
     @Embedded
     private Address address;
@@ -24,18 +25,17 @@ public class Warehouse {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("warehouse-stock")
     private List<Stock> stocks;
 
     public Warehouse() {}
 
-    public Warehouse(String name, double size, Address address, Date createdAt, Date updatedAt, List<Stock> stocks) {
+    public Warehouse(String name, double area, Address address, Date createdAt) {
         this.name = name;
-        this.size = size;
+        this.area = area;
         this.address = address;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.stocks = stocks;
     }
 
     public Long getId() {
@@ -50,12 +50,12 @@ public class Warehouse {
         this.name = name;
     }
 
-    public double getSize() {
-        return size;
+    public double getArea() {
+        return area;
     }
 
-    public void setSize(double size) {
-        this.size = size;
+    public void setArea(double area) {
+        this.area = area;
     }
 
     public Address getAddress() {
@@ -92,6 +92,6 @@ public class Warehouse {
 
     @Override
     public String toString() {
-        return "Warehouse{" + "id=" + id + ", name='" + name + '\'' + ", size=" + size + ", address=" + address + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", stocks=" + stocks + '}';
+        return "Warehouse{" + "id=" + id + ", name='" + name + '\'' + ", area=" + area + ", address=" + address + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", stocks=" + stocks + '}';
     }
 }

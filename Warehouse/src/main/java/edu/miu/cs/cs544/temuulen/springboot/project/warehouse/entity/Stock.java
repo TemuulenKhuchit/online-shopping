@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -13,10 +14,12 @@ public class Stock {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference("product-stock")
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
+    @JsonBackReference("warehouse-stock")
     private Warehouse warehouse;
 
     private int quantity;

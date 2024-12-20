@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ public class Product {
 
     private String name;
     private int price;
+    private int costPrice;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -23,18 +25,18 @@ public class Product {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-stock")
     private List<Stock> stocks;
 
     public Product() {}
 
-    public Product(String name, int price, Category category, Date createdAt, Date updatedAt, List<Stock> stocks) {
+    public Product(String name, int price, int costPrice, Category category, Date createdAt) {
         this.name = name;
         this.price = price;
+        this.costPrice = costPrice;
         this.category = category;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.stocks = stocks;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(int costPrice) {
+        this.costPrice = costPrice;
     }
 
     public Category getCategory() {
