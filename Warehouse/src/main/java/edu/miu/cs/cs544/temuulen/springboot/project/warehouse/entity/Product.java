@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@NamedQuery(
+        name = "Product.findByCategory",
+        query = "SELECT p FROM Product p WHERE p.category = :category"
+)
 @Entity
 public class Product {
     @Id

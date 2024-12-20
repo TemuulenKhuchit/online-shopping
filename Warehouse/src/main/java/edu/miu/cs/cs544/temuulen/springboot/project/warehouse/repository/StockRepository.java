@@ -20,4 +20,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     @Query("SELECT s FROM Stock s WHERE s.product = :product ORDER BY s.qty DESC")
     List<Stock> findByProductOrderByQtyDesc(@Param("product") Product product);
+
 }

@@ -1,12 +1,13 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class OrderDTO {
+public class OrderDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Long orderId;
     private String orderNumber;
-    private String orderStatus;
     private Date orderDate;
     private List<OrderDetailDTO> details;
 
@@ -20,14 +21,6 @@ public class OrderDTO {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
     }
 
     public Date getOrderDate() {

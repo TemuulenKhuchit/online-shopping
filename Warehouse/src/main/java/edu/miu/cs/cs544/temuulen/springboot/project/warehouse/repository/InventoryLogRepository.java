@@ -7,11 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InventoryLogRepository extends JpaRepository<InventoryLog, Long> {
 
-    @Query("SELECT l FROM InventoryLog l WHERE l.orderId = :orderId")
-    List<InventoryLog> findByOrderId(@Param("orderId") Long orderId);
+    @Query("SELECT l FROM InventoryLog l " +
+            "WHERE l.orderId = :orderId AND l.changeType = 'SALE' AND l.orderId NOT IN (" +
+            "SELECT k.orderId FROM InventoryLog k WHERE k.orderId = :orderId AND k.changeType = 'RETURN')")
+    Optional<List<InventoryLog>> findByOrderId(@Param("orderId") Long orderId);
 
 }

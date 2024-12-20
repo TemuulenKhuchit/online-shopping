@@ -1,7 +1,9 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.service;
 
+import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.Category;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.Product;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
+import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductRepositoryImpl productRepositoryImpl;
 
     public Product createProduct(Product product) {
         product.setCreatedAt(new Date());
@@ -42,4 +47,17 @@ public class ProductService {
         Product product = getProductById(id);
         productRepository.delete(product);
     }
+
+    public List<Product> getLowStockProducts(int qty) {
+        return productRepository.findProductsHigherThanQty(qty);
+    }
+
+    public List<Product> getProductsByCategory(Category category) {
+        return productRepository.findByCategory(category);
+    }
+
+    public List<Product> getProductsByPriceRange(int minPrice, int maxPrice) {
+        return productRepositoryImpl.findProductsByPriceRange(minPrice, maxPrice);
+    }
+
 }

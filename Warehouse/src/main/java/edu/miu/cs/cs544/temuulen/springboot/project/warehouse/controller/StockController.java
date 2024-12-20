@@ -5,6 +5,7 @@ import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.Stock;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,22 +23,10 @@ public class StockController {
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/total-stock")
+    @GetMapping(value = "/total-stock", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Integer> getTotalStockByProduct(@RequestParam Long productId) {
         int totalStock = stockService.getTotalStockByProduct(productId);
         return new ResponseEntity<>(totalStock, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/sale")
-    public ResponseEntity<String> processSale(@RequestBody OrderDTO order) {
-        stockService.processSale(order);
-        return new ResponseEntity<>("Sale processed successfully", HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/return/{orderId}")
-    public ResponseEntity<String> processReturn(@PathVariable Long orderId) {
-        stockService.processReturn(orderId);
-        return new ResponseEntity<>("Return processed successfully", HttpStatus.OK);
     }
 
 }

@@ -15,4 +15,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Cannot delete or update the record because it is referenced by another table. Details: " + e.getMessage());
     }
+
 }
