@@ -19,5 +19,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     Optional<Integer> findTotalStockByProductId(@Param("productId") Long productId);
 
     @Query("SELECT s FROM Stock s WHERE s.product = :product ORDER BY s.qty DESC")
-    List<Stock> findByProductOrderByQuantityDesc(Product product);
+    List<Stock> findByProductOrderByQtyDesc(@Param("product") Product product);
 }

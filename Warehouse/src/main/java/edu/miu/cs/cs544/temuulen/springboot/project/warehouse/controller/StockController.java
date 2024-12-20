@@ -1,16 +1,12 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.controller;
 
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto.OrderDTO;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.InventoryLog;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.Stock;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/stocks")
@@ -21,8 +17,8 @@ public class StockController {
 
     @PostMapping(value = "/restock")
     public ResponseEntity<Stock> restock(@RequestParam Long productId, @RequestParam Long warehouseId,
-                         @RequestParam int quantity, @RequestParam(required = false) String description) {
-        Stock stock = stockService.restock(productId, warehouseId, quantity, description);
+                                         @RequestParam int qty, @RequestParam(required = false) String description) {
+        Stock stock = stockService.restock(productId, warehouseId, qty, description);
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
@@ -38,9 +34,9 @@ public class StockController {
         return new ResponseEntity<>("Sale processed successfully", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/return")
-    public ResponseEntity<String> processReturn(@RequestBody OrderDTO order) {
-        stockService.processReturn(order);
+    @PostMapping(value = "/return/{orderId}")
+    public ResponseEntity<String> processReturn(@PathVariable Long orderId) {
+        stockService.processReturn(orderId);
         return new ResponseEntity<>("Return processed successfully", HttpStatus.OK);
     }
 

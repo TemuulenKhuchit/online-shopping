@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderDTO {
-    private String orderId;
+    private Long orderId;
     private String orderNumber;
     private String orderStatus;
     private Date orderDate;
     private List<OrderDetailDTO> details;
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 

@@ -10,6 +10,7 @@ import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.Warehou
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class StockService {
     @Autowired
     private InventoryLogRepository inventoryLogRepository;
 
-    public Stock restock(Long productId, Long warehouseId, int quantity, String description) {
+    public Stock restock(Long productId, Long warehouseId, int qty, String description) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Warehouse warehouse = warehouseRepository.findById(warehouseId)
@@ -37,11 +38,11 @@ public class StockService {
         Stock stock = stockRepository.findByProductAndWarehouse(product, warehouse)
                 .orElseGet(() -> new Stock(product, warehouse, 0, null));
 
-        stock.setQty(stock.getQty() + quantity);
+        stock.setQty(stock.getQty() + qty);
         stock.setUpdatedAt(new Date());
         stock = stockRepository.save(stock);
 
-        InventoryLog log = new InventoryLog(stock, StockChangeType.RESTOCK, quantity, new Date(),
+        InventoryLog log = new InventoryLog(stock, StockChangeType.RESTOCK, qty, null, new Date(),
                 description != null ? description : "Restock operation");
         inventoryLogRepository.save(log);
 
@@ -57,7 +58,7 @@ public class StockService {
             Product product = productRepository.findById(detail.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
-            List<Stock> stocks = stockRepository.findByProductOrderByQuantityDesc(product);
+            List<Stock> stocks = stockRepository.findByProductOrderByQtyDesc(product);
 
             int orderedQty = detail.getQty();
 
@@ -71,15 +72,11 @@ public class StockService {
 
                 int availableQty = stock.getQty();
                 if (availableQty >= orderedQty) {
-                    stock.setQty(availableQty - orderedQty);
-                    stock.setUpdatedAt(new Date());
-                    stockRepository.save(stock);
+                    logInventoryChange(stock, order.getOrderId(), orderedQty, StockChangeType.SALE, "Sold from only one warehouse");
                     orderedQty = 0;
                 }
                 else {
-                    stock.setQty(0);
-                    stock.setUpdatedAt(new Date());
-                    stockRepository.save(stock);
+                    logInventoryChange(stock, order.getOrderId(), availableQty, StockChangeType.SALE, "Sold from multiple warehouses");
                     orderedQty -= availableQty;
                 }
             }
@@ -87,8 +84,27 @@ public class StockService {
         }
     }
 
+    public void processReturn(Long orderId) {
+        List<InventoryLog> logs = inventoryLogRepository.findByOrderId(orderId);
+        for (InventoryLog log : logs) {
+            logInventoryChange(log.getStock(), orderId, log.getQty(), StockChangeType.RETURN, "Returned");
+        }
+    }
 
-    public void processReturn(OrderDTO order) {
+    private void logInventoryChange(Stock stock, Long orderId, int qty, StockChangeType changeType, String description) {
+        InventoryLog log = new InventoryLog(stock, changeType, qty, orderId, new Date(), description);
+        log.setLogTimestamp(new Date());
+        inventoryLogRepository.save(log);
 
+        int newQty = 0;
+        if (changeType == StockChangeType.SALE)
+            newQty = stock.getQty() - qty;
+        else if (changeType == StockChangeType.RETURN)
+            newQty = stock.getQty() + qty;
+        else newQty = stock.getQty();
+
+        stock.setQty(newQty);
+        stock.setUpdatedAt(new Date());
+        stockRepository.save(stock);
     }
 }

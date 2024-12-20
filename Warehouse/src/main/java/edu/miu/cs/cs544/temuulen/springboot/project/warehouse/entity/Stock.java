@@ -27,7 +27,7 @@ public class Stock {
     private int qty;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("warehouse-stock")
+    @JsonManagedReference
     private List<InventoryLog> logs;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,8 +66,8 @@ public class Stock {
         return qty;
     }
 
-    public void setQty(int quantity) {
-        this.qty = quantity;
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public Date getUpdatedAt() {
@@ -80,6 +80,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "Stock{" + "id=" + id + ", product=" + product + ", warehouse=" + warehouse + ", quantity=" + qty + ", updatedAt=" + updatedAt + '}';
+        return "Stock{" + "id=" + id + ", product=" + product + ", warehouse=" + warehouse + ", qty=" + qty + ", updatedAt=" + updatedAt + '}';
     }
 }

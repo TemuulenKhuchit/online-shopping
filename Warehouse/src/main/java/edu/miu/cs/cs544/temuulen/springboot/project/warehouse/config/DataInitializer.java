@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +16,7 @@ import java.util.Random;
 @Component
 public class DataInitializer implements CommandLineRunner {
     private static final int NUMBER_OF_STOCKS = 50;
-    private static final int MAX_QUANTITY = 100;
+    private static final int MAX_QTY = 100;
 
     @Autowired
     private StockRepository stockRepository;
@@ -66,13 +64,12 @@ public class DataInitializer implements CommandLineRunner {
         for (int i = 0; i < NUMBER_OF_STOCKS; i++) {
             Product product = products.get(random.nextInt(products.size()));
             Warehouse warehouse = warehouses.get(random.nextInt(warehouses.size()));
-            int quantity = random.nextInt(MAX_QUANTITY) + 1;
-            Date updatedAt = new Date();
+            int qty = random.nextInt(MAX_QTY) + 1;
 
-            Stock stock = new Stock(product, warehouse, quantity, updatedAt);
+            Stock stock = new Stock(product, warehouse, qty, new Date());
             stockRepository.save(stock);
 
-            InventoryLog log = new InventoryLog(stock, StockChangeType.RESTOCK, 50, new Date(), "Initial stock added");
+            InventoryLog log = new InventoryLog(stock, StockChangeType.RESTOCK, 50, null, new Date(), "Initial stock added");
             inventoryLogRepository.save(log);
         }
 
