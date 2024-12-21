@@ -5,6 +5,7 @@ import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.Invento
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.StockRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.WarehouseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class StockService {
     @Autowired
     private InventoryLogRepository inventoryLogRepository;
 
+    @Transactional
     public Stock restock(Long productId, Long warehouseId, int qty, String description) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

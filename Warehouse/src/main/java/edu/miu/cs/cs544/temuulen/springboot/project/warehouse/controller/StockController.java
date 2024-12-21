@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/stocks")
+@RequestMapping("/api/admin/stocks")
 public class StockController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class StockController {
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/total-stock", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/total-stock")
     public ResponseEntity<Integer> getTotalStockByProduct(@RequestParam Long productId) {
         int totalStock = stockService.getTotalStockByProduct(productId);
         return new ResponseEntity<>(totalStock, HttpStatus.OK);

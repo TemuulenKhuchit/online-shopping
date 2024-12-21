@@ -10,6 +10,7 @@ import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.Invento
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.StockRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.WarehouseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class OrderService {
     @Autowired
     private InventoryLogRepository inventoryLogRepository;
 
+    @Transactional
     public void processSale(OrderDTO order) {
         for (OrderDetailDTO detail : order.getDetails()) {
             Product product = productRepository.findById(detail.getProductId())

@@ -1,33 +1,29 @@
-package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
+package edu.miu.cs.cs544.temuulen.springboot.project.order.entity;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String username;
-
-    @Column(nullable = false)
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String email;
 
     @Version
     private int version;
 
     public User() {}
 
-    public User(String username, String password, Role role) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.email = email;
     }
 
     public Long getId() {
@@ -50,11 +46,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRole(Role roles) {
-        this.role = roles;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

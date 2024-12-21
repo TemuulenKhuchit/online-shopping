@@ -37,10 +37,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User user = new User("user", passwordEncoder.encode("user123"), Set.of("ROLE_USER"));
+        User user = new User("user", passwordEncoder.encode("user123"), Role.ROLE_USER);
         userRepository.save(user);
 
-        User admin = new User("admin", passwordEncoder.encode("admin123"), Set.of("ROLE_ADMIN"));
+        User admin = new User("admin", passwordEncoder.encode("admin123"), Role.ROLE_ADMIN);
         userRepository.save(admin);
 
         List<Product> products = List.of(

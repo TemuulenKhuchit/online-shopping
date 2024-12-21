@@ -14,8 +14,13 @@ public class OrderMessageConsumer {
     @JmsListener(destination = "orders.queue")
     public void receiveOrderMessage(OrderDTO order) {
         System.out.println("Received order message from Order system: " + order.getOrderId());
+        distributionMessageProducer.sendDistributionOrderMessage(order);
+    }
 
-        distributionMessageProducer.sendDistributionMessage(order);
+    @JmsListener(destination = "returns.queue")
+    public void receiveReturnMessage(Long orderId) {
+        System.out.println("Received return message from Order system: " + orderId);
+        distributionMessageProducer.sendDistributionReturnMessage(orderId);
     }
 
 }

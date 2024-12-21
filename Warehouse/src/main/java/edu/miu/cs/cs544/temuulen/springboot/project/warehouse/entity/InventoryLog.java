@@ -29,6 +29,9 @@ public class InventoryLog {
 
     private String description;
 
+    @Version
+    private int version;
+
     public InventoryLog() {}
 
     public InventoryLog(Stock stock, StockChangeType changeType, int qty, Long orderId, Date logTimestamp, String description) {

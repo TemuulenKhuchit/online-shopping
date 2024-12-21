@@ -29,6 +29,9 @@ public class Warehouse {
     @JsonManagedReference("warehouse-stock")
     private List<Stock> stocks;
 
+    @Version
+    private int version;
+
     public Warehouse() {}
 
     public Warehouse(String name, double area, Address address, Date createdAt) {

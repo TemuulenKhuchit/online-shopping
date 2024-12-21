@@ -10,7 +10,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/user/orders")
 public class OrderController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class OrderController {
     @PostMapping(value = "/return/{orderId}")
     public ResponseEntity<String> processReturn(@PathVariable Long orderId) {
         orderService.processReturn(orderId);
-        jmsTemplate.convertAndSend("orders.queue", orderId);
+        jmsTemplate.convertAndSend("returns.queue", orderId);
         return new ResponseEntity<>("Order return request sent to Warehouse system: " + orderId, HttpStatus.OK);
     }
 

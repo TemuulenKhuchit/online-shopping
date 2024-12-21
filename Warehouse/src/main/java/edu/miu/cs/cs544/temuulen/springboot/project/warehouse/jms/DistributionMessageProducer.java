@@ -11,8 +11,13 @@ public class DistributionMessageProducer {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void sendDistributionMessage(OrderDTO order) {
-        jmsTemplate.convertAndSend("distribution.queue", order);
+    public void sendDistributionOrderMessage(OrderDTO order) {
+        jmsTemplate.convertAndSend("distributionOrder.queue", order);
         System.out.println("Order message sent to Distribution system: " + order.getOrderId());
+    }
+
+    public void sendDistributionReturnMessage(Long orderId) {
+        jmsTemplate.convertAndSend("distributionReturn.queue", orderId);
+        System.out.println("Return message sent to Distribution system: " + orderId);
     }
 }

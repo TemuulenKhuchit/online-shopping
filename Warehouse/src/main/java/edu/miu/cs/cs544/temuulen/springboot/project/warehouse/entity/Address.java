@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Version;
 
 @Embeddable
 public class Address {
