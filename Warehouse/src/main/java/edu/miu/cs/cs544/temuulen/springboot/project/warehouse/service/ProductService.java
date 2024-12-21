@@ -14,6 +14,9 @@ import java.util.List;
 public class ProductService {
 
     @Autowired
+    private SaveService saveService;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
@@ -40,7 +43,7 @@ public class ProductService {
         product.setCostPrice(productDetails.getCostPrice());
         product.setCategory(productDetails.getCategory());
         product.setUpdatedAt(new Date());
-        return productRepository.save(product);
+        return saveService.saveProduct(product);
     }
 
     public void deleteProduct(Long id) {

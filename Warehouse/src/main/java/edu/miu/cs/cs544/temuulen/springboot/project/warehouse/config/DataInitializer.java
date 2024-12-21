@@ -1,22 +1,27 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.config;
 
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.*;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.InventoryLogRepository;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.StockRepository;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.WarehouseRepository;
+import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
     private static final int NUMBER_OF_STOCKS = 50;
     private static final int MAX_QTY = 100;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private StockRepository stockRepository;
@@ -32,6 +37,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        User user = new User("user", passwordEncoder.encode("user123"), Set.of("ROLE_USER"));
+        userRepository.save(user);
+
+        User admin = new User("admin", passwordEncoder.encode("admin123"), Set.of("ROLE_ADMIN"));
+        userRepository.save(admin);
+
         List<Product> products = List.of(
                 new Product("Laptop", 1000, 800, Category.ELECTRONICS, new Date()),
                 new Product("T-shirt", 20, 10, Category.FASHION, new Date()),

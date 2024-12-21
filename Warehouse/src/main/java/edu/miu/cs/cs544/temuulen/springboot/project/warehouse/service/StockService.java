@@ -1,7 +1,5 @@
 package edu.miu.cs.cs544.temuulen.springboot.project.warehouse.service;
 
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto.OrderDTO;
-import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.dto.OrderDetailDTO;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.entity.*;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.InventoryLogRepository;
 import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.ProductRepository;
@@ -10,13 +8,13 @@ import edu.miu.cs.cs544.temuulen.springboot.project.warehouse.repository.Warehou
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StockService {
+
+    @Autowired
+    private SaveService saveService;
 
     @Autowired
     private StockRepository stockRepository;
@@ -40,8 +38,7 @@ public class StockService {
                 .orElseGet(() -> new Stock(product, warehouse, 0, null));
 
         stock.setQty(stock.getQty() + qty);
-        stock.setUpdatedAt(new Date());
-        stock = stockRepository.save(stock);
+        stock = saveService.saveStock(stock);
 
         InventoryLog log = new InventoryLog(stock, StockChangeType.RESTOCK, qty, null, new Date(),
                 description != null ? description : "Restock operation");
